@@ -1,0 +1,72 @@
+2020/07/31
+0.1
+- initial release
+
+2020/08/02
+0.2
+- NFS v2 support enabled by default
+
+2020/08/05
+0.3
+- default client name changed to IRIS
+- all passwords changed to reanimator
+- /etc/issue and /etc/issue.net updated with instructions
+- run configuration script when main user logs in
+- AppleTalk enabled, in addition to Samba and NFS
+- tested on Raspberry Pi 1, 2 and 3
+- tcpser started at system startup
+
+2020/08/10
+0.4
+- added FTP support
+- structured menus for system configuration: menus and submenus, it's much easier to configure the system
+- enabled services: bootp, tfptp, rsh, ssh, sftp, anonymous FTP, NFS (versions 2, 3, 4, 4.1, 4.2), Samba, AppleTalk
+- automount of ISO images at boot and trough user menus. Just upload your ISO images to ISOs directory and will be mounted at boot, or mount them using the user menus
+- note: EFS CDs are no mounted on Debian for Raspberry Pi, it seems EFS support has been removed from kernel
+
+2020/08/11
+0.5
+- /home/irix/.rhosts changed to "+ +" instead "+ root"
+
+2020/09/15
+0.6
+- permisions of /home/irix/i/* are set to 777 at boot
+
+2022/02/21
+0.7
+- Automount menu: 'df -Th' is used instead 'df -h'
+- crossmnt is used on /etc/exports to allow nested mounts
+- new menu to mount /dev/sda1 on Raspberry Pi
+- new options to open a shell on mount directories
+
+2022/04/10
+0.8
+- IRIX downloads from the Internet
+- added Midnight Commander to browse directories
+- update Reanimator scripts from the Internet
+
+2022/04/15
+0.9
+- Raspberry Pi: network assistant to select wired or Wi-Fi connection to the Internet. The RBPi will work as a router for your sgi computer, allowing access to the Internet through your Wi-Fi network
+
+2022/05/15
+1.0
+- NFS v4 disabled
+- IPv6 disabled
+- Diskless workstation support
+
+2022/06/26
+1.1
+- tftpd replaced by tftpd-hpa
+- pub directory for ftp
+- simplified paths for tftp: removed heading "i/"
+- Alpha systems netboot template (see /etc/bootptab)
+
+2022/07/10
+1.2
+- IRIX 6.3 available for download, tested by kikems (thanks!)
+- automatic checking and creation of directories under /home/irix and /diskless
+- update from 1.1: just update Reanimator scripts from the Internet
+- updated install guide
+1.2.1
+- return to tftpd: Octane won't boot with tftpd-hpa
