@@ -1,0 +1,40 @@
+# Example (serve): start serving on 0.0.0.0:69
+#   $ tftp-now serve
+
+# Example (read): receive '{server root}/dir/foo' from 192.168.1.1 and save it to 'bar'.
+#   $ tftp-now read -host 192.168.1.1 -remote dir/foo -local bar
+
+# Example (write): send 'bar' to '{server root}/dir/foo' of 192.168.1.1.
+#   $ tftp-now write -host 192.168.1.1 -remote dir/foo -local bar
+
+services:
+  tftp-host:
+    image: sgi
+    restart: always
+    # weirdness remapping UDP ports??
+    ports:
+      - 6969:69/udp
+    
+    volumes:
+      - irix:/irix
+    networks:
+      - irix
+
+  tftp-client:
+    image: sgi
+    # restart: no
+    volumes:
+      - irix:/irix
+    networks:
+      - irix
+    command: bash -c "tftp-now write -host tftp-host -port 69 -remote /test6.file -local /dhpd.conf"
+    depends_on:
+      - tftp-host
+
+volumes:
+  irix:
+
+networks:
+  irix:
+
+
