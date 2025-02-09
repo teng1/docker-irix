@@ -1,8 +1,8 @@
 
 FROM alpine:3.21
 
-# ENV UID=9069 \
-#   GID=9069
+ENV UID=9069 \
+  GID=9069
 
 ARG ARCH=amd64
 
@@ -40,7 +40,7 @@ EXPOSE 69/udp
 #     echo -e "#!/bin/sh\nbusybox syslogd -n -O /dev/stdout" > \
 #         /runit-services/syslogd/run && \
 #     echo -e "#!/bin/sh\n/usr/sbin/in.tftpd --foreground --address 0.0.0.0:69 \
-#         --user tftp --port-range 4096:32760 --create --verbose --verbosity 3 --secure /tftpboot" \
+#     --user tftp --port-range 7000:7005 --create --verbose --verbosity 3 /tftpboot" \
 #          > /runit-services/tftpd-hpa/run && \
 #     chmod +x /runit-services/syslogd/run /runit-services/tftpd-hpa/run && \
 #     chmod 777 /tftpboot
