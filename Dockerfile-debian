@@ -1,37 +1,86 @@
 # Dockerfile
 FROM docker.io/library/debian:bookworm-slim
 
+# rshd, rlogind are in /usr/sbin
+# inetd-
 RUN apt-get update && apt-get install -y --no-install-recommends \
+  bootp \
   net-tools \
-  man \
+  mksh \
+  busybox \
+  build-essential \ 
+  xinetd \
+  rsh-redone-server \
+  rsh-redone-client \
   bash \
   tftpd-hpa \
-  kea \
+  supervisor \
   dnsmasq \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
+
+COPY src/debian/inetd.conf /etc/inetd.conf
+COPY src/debian/supervisord.conf /etc/supervisord.conf
+
+
+# Setup irix account for remote shell 
+RUN adduser --home /home/irix --shell /bin/mksh --system --group --disabled-password --gecos 'SGI IRIX' irix && \
+  echo '+ root' > /home/irix/.rhosts
+
+# Configure SGI client machine hostame and IP address  
+RUN echo 'iris:ip=192.168.9.1' >> /etc/bootptab
+
+# Enable SGI client to bypass pam.d
+RUN echo '# disable ' > /etc/pam.d/rsh
+
+# add docker-entrypoint.sh
+COPY src/debian/docker-entrypoint.sh /
+RUN ["chmod", "+x", "/docker-entrypoint.sh"]
+
 USER root
+ENTRYPOINT ["/docker-entrypoint.sh"]
+# CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
+# # /etc/inetd.conf:  see inetd(8) for further informations.
+# #
+# # Internet superserver configuration database
+# #
+# #
+# # Lines starting with "#:LABEL:" or "#<off>#" should not
+# # be changed unless you know what you are doing!
+# #
+# # If you want to disable an entry so it isn't touched during
+# # package updates just comment it out with a single '#' character.
+# #
+# # Packages should modify this file by using update-inetd(8)
+# #
+# # <service_name> <sock_type> <proto> <flags> <user> <server_path> <args>
+# #
+# #:INTERNAL: Internal services
+# #discard		stream	tcp	nowait	root	internal
+# #discard		dgram	udp	wait	root	internal
+# #daytime		stream	tcp	nowait	root	internal
+# #time		stream	tcp	nowait	root	internal
 
-# RUN apt-get update \
-#  && </dev/null DEBIAN_FRONTEND=noninteractive \
-#     apt-get --yes install --no-install-recommends git cmake build-essential cron \
-#  && apt-get clean \
-#  && rm -rf /var/lib/apt/lists/*
+# #:STANDARD: These are standard services.
 
-# FROM ubuntu:16.04
-# RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/00-docker
-# RUN echo 'APT::Install-Recommends "0";' >> /etc/apt/apt.conf.d/00-docker
-# RUN DEBIAN_FRONTEND=noninteractive \
-#   apt-get update && \
-#   apt-get install -y \
-#   python3 \
-#   build-essential \
-#   # tftpd \
-#   tftp \
-#   # rsh-redone-server \
-#   mksh \
-#   screen \
-#   && rm -rf /var/lib/apt/lists/*
-# RUN useradd -ms /bin/bash apprunner
-# USER apprunner
+# #:BSD: Shell, login, exec and talk are BSD protocols.
+# shell		stream	tcp	nowait	root	/usr/sbin/tcpd	/usr/sbin/in.rshd
+# login		stream	tcp	nowait	root	/usr/sbin/tcpd	/usr/sbin/in.rlogind
+
+# #:MAIL: Mail, news and uucp services.
+
+# #:INFO: Info services
+
+# #:BOOT: TFTP service is provided primarily for booting.  Most sites
+# #       run this only on machines acting as "boot servers."
+# #bootps		dgram	udp	wait	root	/usr/sbin/bootpd	bootpd -i -t 120
+# bootps          dgram   udp     wait    root    /usr/sbin/bootpd        bootpd -i -t 120 -d 4
+
+# #tftp		dgram	udp	wait	nobody	/usr/sbin/tcpd	/usr/sbin/in.tftpd /srv/tftp
+# tftp		dgram	udp	wait	nobody	/usr/sbin/tcpd	/usr/sbin/in.tftpd -s /srv/tftp/i
+
+# #:RPC: RPC based services
+
+# #:HAM-RADIO: amateur-radio services
+

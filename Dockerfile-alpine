@@ -1,11 +1,8 @@
 
 FROM alpine:3.21
 
-ENV UID=9069 \
-  GID=9069
-
 ARG ARCH=amd64
-
+# may need rsh-redone 
 RUN apk update && apk add --no-cache \
   supervisor \
   openssh \
@@ -30,12 +27,8 @@ EXPOSE 69/udp
 #             --uid $UID tftp
 
 # COPY src/forward-stdout  etc/socklog.rules/forward-stdout
-
-
+RUN echo 'IRIS:ip=192.168.9.1' > /etc/bootptab
+COPY src/hosts /etc/hosts
 COPY src/supervisord.conf /etc/supervisord.conf
-# COPY src/tftp-hpa /etc/default/tftp-hpa
-COPY src/dhcpd.conf /etc/dhpd/dhpd.conf
-COPY src/dhcpd.conf /dhpd.conf
 USER root
-
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
