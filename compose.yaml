@@ -1,39 +1,26 @@
 
 services:
-  tftp-host:
-    image: sgi
-    restart: always
-    volumes:
-      - irix:/irix
+  irix:
+    image: silicon
+
+    # volumes:
+    #   - irix:/irix
     network_mode: host
+    tty: true 
+    privileged: true 
 
-  tftp-int-host:
-    image: sgi
-    restart: always
-    volumes:
-      - irix:/irix
-    networks:
-      - irix
+  # irix-network-install-cient:
+  #   image: sgi
+  #   restart: always
+  #   privileged: true
+  #   volumes:
+  #     - irix:/irix
+  #   networks:
+  #     - irix
 
-  tftp-client:
-    image: sgi
-    # restart: no
-    # weirdness remapping UDP ports on tftp
-    ports:
-      - 127.0.0.1:6969:69/udp
-      - 127.0.0.1:7000-7005:7000-7005/udp
-    volumes:
-      - irix:/irix
-    networks:
-      - irix
-    command: bash -c "tftp-now write -host tftp-int-host -port 69 -remote /test6.file -local /dhpd.conf"
-    depends_on:
-      - tftp-int-host
-
-volumes:
-  irix:
-
-networks:
-  irix:
+# volumes:
+#   irix:
+# networks:
+#   irix:
 
 

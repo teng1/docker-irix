@@ -19,13 +19,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 
-COPY src/debian/inetd.conf /etc/inetd.conf
+# COPY src/debian/inetd.conf /etc/inetd.conf
+COPY src/debian/xinetd.d/ /etc/xinetd.d/
 COPY src/debian/supervisord.conf /etc/supervisord.conf
 
 
 # Setup irix account for remote shell 
 RUN adduser --home /home/irix --shell /bin/mksh --system --group --disabled-password --gecos 'SGI IRIX' irix && \
   echo '+ root' > /home/irix/.rhosts
+
+# RUN echo  'client root' > /etc/hosts.equiv
+
+
 
 # Configure SGI client machine hostame and IP address  
 RUN echo 'iris:ip=192.168.9.1' >> /etc/bootptab
@@ -39,48 +44,4 @@ RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 
 USER root
 ENTRYPOINT ["/docker-entrypoint.sh"]
-# CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
-
-# # /etc/inetd.conf:  see inetd(8) for further informations.
-# #
-# # Internet superserver configuration database
-# #
-# #
-# # Lines starting with "#:LABEL:" or "#<off>#" should not
-# # be changed unless you know what you are doing!
-# #
-# # If you want to disable an entry so it isn't touched during
-# # package updates just comment it out with a single '#' character.
-# #
-# # Packages should modify this file by using update-inetd(8)
-# #
-# # <service_name> <sock_type> <proto> <flags> <user> <server_path> <args>
-# #
-# #:INTERNAL: Internal services
-# #discard		stream	tcp	nowait	root	internal
-# #discard		dgram	udp	wait	root	internal
-# #daytime		stream	tcp	nowait	root	internal
-# #time		stream	tcp	nowait	root	internal
-
-# #:STANDARD: These are standard services.
-
-# #:BSD: Shell, login, exec and talk are BSD protocols.
-# shell		stream	tcp	nowait	root	/usr/sbin/tcpd	/usr/sbin/in.rshd
-# login		stream	tcp	nowait	root	/usr/sbin/tcpd	/usr/sbin/in.rlogind
-
-# #:MAIL: Mail, news and uucp services.
-
-# #:INFO: Info services
-
-# #:BOOT: TFTP service is provided primarily for booting.  Most sites
-# #       run this only on machines acting as "boot servers."
-# #bootps		dgram	udp	wait	root	/usr/sbin/bootpd	bootpd -i -t 120
-# bootps          dgram   udp     wait    root    /usr/sbin/bootpd        bootpd -i -t 120 -d 4
-
-# #tftp		dgram	udp	wait	nobody	/usr/sbin/tcpd	/usr/sbin/in.tftpd /srv/tftp
-# tftp		dgram	udp	wait	nobody	/usr/sbin/tcpd	/usr/sbin/in.tftpd -s /srv/tftp/i
-
-# #:RPC: RPC based services
-
-# #:HAM-RADIO: amateur-radio services
-
+#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
