@@ -1,0 +1,11 @@
+service bootps
+{
+  protocol = udp
+  socket_type = dgram
+  flags = IPv4
+  wait = yes
+  user = root
+  server = /usr/sbin/bootpd
+  server_args = -i -t 120 -d 4
+  disable = no
+}
