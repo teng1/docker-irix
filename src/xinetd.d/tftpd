@@ -7,6 +7,7 @@ service tftp
   wait = yes
   user = root
   server = /usr/sbin/in.tftpd
-  server_args = -s /home/irix
+  server_args = -vvvv -4 -c -s /home/irix
   disable = no
+  log_type = SYSLOG daemon debug
 }

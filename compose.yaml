@@ -2,12 +2,14 @@
 services:
   irix:
     image: silicon
-
     # volumes:
     #   - irix:/irix
     network_mode: host
+    hostname: irix
     tty: true 
     privileged: true 
+    extra_hosts:
+     - irix:192.168.1.2
 
   # irix-network-install-cient:
   #   image: sgi

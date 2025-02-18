@@ -1,0 +1,3 @@
+irix:ip=192.168.1.2
+iris:ip=192.168.9.1
+localhost:td=/home/irix:bf=bob.txt

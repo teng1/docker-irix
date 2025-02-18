@@ -7,5 +7,6 @@ service bootps
   user = root
   server = /usr/sbin/bootpd
   server_args = -i -t 120 -d 4
-  disable = no
+  disable = yes
+  log_type = SYSLOG daemon debug
 }

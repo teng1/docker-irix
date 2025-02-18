@@ -1,4 +1,4 @@
-service login
+service shell
 {
   socket_type = stream
   protocol = tcp
@@ -7,6 +7,8 @@ service login
   user = root
   log_on_success += USERID
   log_on_failure += USERID
-  server = /usr/sbin/in.rlogind
+  server = /usr/sbin/in.rshd
   disable = no
+  # log_type = FILE /dev/fd/1
+  log_type = SYSLOG daemon debug
 }
