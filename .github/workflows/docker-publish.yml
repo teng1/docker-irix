@@ -24,4 +24,4 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: user/app:0.0.1
+          tags: teng2/irix-network-install:0.0.1
