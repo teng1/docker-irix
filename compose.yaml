@@ -1,7 +1,7 @@
 
 services:
-  irix:
-    image: silicon
+  network-install:
+    image: teng2/irix-network-install:latest
     # volumes:
     #   - irix:/irix
     network_mode: host

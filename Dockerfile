@@ -13,11 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   bash \
   tftpd-hpa \
   supervisor \
-  dnsmasq \
-  dhcping \
   tcpdump \
   procps \
-  vim \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 
@@ -49,4 +46,3 @@ RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 
 USER root
 ENTRYPOINT ["/docker-entrypoint.sh"]
-#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
