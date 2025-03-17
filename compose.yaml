@@ -1,15 +1,15 @@
 
 services:
   network-install:
-    image: teng2/irix-network-install:latest
+    image: teng2/irix-network-install:0.0.1
     # volumes:
     #   - irix:/irix
     network_mode: host
     hostname: irix
     tty: true 
     privileged: true 
-    extra_hosts:
-     - irix:192.168.1.2
+    # extra_hosts:
+    #  - irix:192.168.1.2
 
   # irix-network-install-cient:
   #   image: sgi
