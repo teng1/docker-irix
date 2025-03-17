@@ -8,8 +8,8 @@ services:
     hostname: irix
     tty: true 
     privileged: true 
-    # extra_hosts:
-    #  - irix:192.168.1.2
+    extra_hosts:
+     - iris:192.168.9.1
 
   # irix-network-install-cient:
   #   image: sgi
